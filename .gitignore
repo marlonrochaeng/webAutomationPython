@@ -2,6 +2,7 @@
 .pytest_cache/
 .vscode/
 __pycache__/
+screenshots/
 
 # Don't track this files
 *.pyc
