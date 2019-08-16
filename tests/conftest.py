@@ -1,6 +1,27 @@
 import pytest
 from werkzeug.security import safe_str_cmp
 from selenium import webdriver
+from timeit import default_timer as timer
+from datetime import timedelta
+from config.evidence_gen import EvidenceGenerator
+from werkzeug.security import safe_str_cmp
+
+SCREENSHOT = 'screenshots/'
+
+
+def pytest_sessionstart(session):
+    session.results = dict()
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    result = outcome.get_result()
+
+    if result.when == 'call':
+        item.session.results[item] = result
+
+def pytest_sessionfinish(session, exitstatus):
+    return sum(1 for result in session.results.values() if result.failed)
 
 @pytest.yield_fixture(scope='function')
 def BrowserSetUp(request, browser):
@@ -30,3 +51,21 @@ def browser(request):
 @pytest.fixture(scope='session')
 def osType(request):
     return request.config.getoption("--osType")
+
+@pytest.fixture(scope='session')
+def GenerateEvidence(request,scope='session'):
+    pytest.time_start = timer()
+    session=request.node
+    yield
+    result = "Failed" if sum(1 for result in session.results.values() if result.failed) > 0 else "Passed"
+    import os
+    pytest.time_end = timer()
+    doc = EvidenceGenerator("Test Automation Framework", 
+                            str(round(pytest.time_end - pytest.time_start,2)) , result)
+    dirs = os.listdir(SCREENSHOT+str(pytest.time_start))  
+    for subdir in dirs:
+        evidencias = []
+        evidencias = os.listdir(SCREENSHOT+str(pytest.time_start)+'/'+subdir+'/')
+        for e in evidencias:            
+            doc.addEvidence(subdir,e,SCREENSHOT+str(pytest.time_start)+'/'+subdir+'/'+e)
+    doc.createDocument(SCREENSHOT+str(pytest.time_start)+'/'+"doc.docx")

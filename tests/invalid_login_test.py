@@ -8,7 +8,7 @@ from ddt import ddt, data, unpack
 from utilities.read_data import getCsvData
 
 
-@pytest.mark.usefixtures("BrowserSetUp")
+@pytest.mark.usefixtures("BrowserSetUp","GenerateEvidence")
 @ddt
 class LoginTest(unittest.TestCase):
 
