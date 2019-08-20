@@ -62,10 +62,11 @@ def GenerateEvidence(request,scope='session'):
     pytest.time_end = timer()
     doc = EvidenceGenerator("Test Automation Framework", 
                             str(round(pytest.time_end - pytest.time_start,2)) , result)
-    dirs = os.listdir(SCREENSHOT+str(pytest.time_start))  
+    TEST_DIR = SCREENSHOT+str(pytest.time_start)
+    dirs = os.listdir(TEST_DIR)  
     for subdir in dirs:
         evidencias = []
-        evidencias = os.listdir(SCREENSHOT+str(pytest.time_start)+'/'+subdir+'/')
+        evidencias = os.listdir(TEST_DIR+'/'+subdir+'/')
         for e in evidencias:            
-            doc.addEvidence(subdir,e,SCREENSHOT+str(pytest.time_start)+'/'+subdir+'/'+e)
-    doc.createDocument(SCREENSHOT+str(pytest.time_start)+'/'+"doc.docx")
+            doc.addEvidence(subdir,e,TEST_DIR+'/'+subdir+'/'+e)
+    doc.createDocument(TEST_DIR+'/'+"doc.docx")
