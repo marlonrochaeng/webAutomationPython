@@ -8,6 +8,7 @@ class LoginPage(BasePage):
     _password_field = "//input[@id='password']"
     _login_button = "//i[contains(text(),'Login')]"
     _login_message = "//div[@id='flash']"
+    _select_login = "//a[@href='/login']"
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -19,7 +20,7 @@ class LoginPage(BasePage):
     
     def SelectFromLogin(self, menu_option):
         if safe_str_cmp(menu_option, "loginForm"):
-            self.ClickOn("xpath", "//a[@href='/login']")
+            self.ClickOn("xpath", self._select_login)
         
     def IsLogged(self):
         message = self.GetElement("xpath", self._login_message)

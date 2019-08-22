@@ -79,7 +79,7 @@ class BasePage():
                 self.log.info("Element found...")
                 return True
             else:
-                self.log.info("Element found...")
+                self.log.info("Element not found...")
                 return False
         except:
             self.log.info("Element not found...")
