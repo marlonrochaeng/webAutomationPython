@@ -12,9 +12,11 @@ from utilities.read_data import getCsvData
 @ddt
 class LoginTest(unittest.TestCase):
 
-    @pytest.fixture(autouse=True)
+    @pytest.yield_fixture(autouse=True)
     def ClassSetup(self, BrowserSetUp):
         self.loginPage = LoginPage(self.driver)
+        yield
+        self.driver.quit()
 
     @data(*getCsvData('C:\\Users\\malencar\\Documents\\MeusProjetos\\WebAutomation\\data\\valid_login_test.csv'))
     @unpack
@@ -26,5 +28,3 @@ class LoginTest(unittest.TestCase):
         self.loginPage.Login(username, password)
 
         self.loginPage.markFinal("test_valid_login",self.loginPage.IsLogged(), "Login was successfull")
-
-        self.driver.quit()
