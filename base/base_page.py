@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from werkzeug.security import safe_str_cmp
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 from traceback import print_stack
 import logging
 import utilities.custom_logger as cl
@@ -70,6 +71,16 @@ class BasePage():
             self.log.info("Keys sended to: " + locator + " with locatorType: " + locatorType)
         except:
             self.log.info("Could not send keys to element: " + locator + " with locatorType: " + locatorType)
+            print_stack()
+
+    def SelectElementByText(self, locatorType="xpath", locator="", text=""):
+        try:
+            element = self.GetElement(locatorType, locator)
+            select = Select(element)
+            select.select_by_visible_text(text)
+            self.log.info("Selected element from menu: " + locator + " with locatorType: " + locatorType)
+        except:
+            self.log.info("Could not select element: " + locator + " with locatorType: " + locatorType)
             print_stack()
 
     def IsElementPresent(self, locatorType="xpath", locator=""):

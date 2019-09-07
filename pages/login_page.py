@@ -10,6 +10,7 @@ class LoginPage(BasePage):
     _login_message = "//div[@id='flash']"
     _select_login = "//a[@href='/login']"
 
+
     def __init__(self, driver):
         super().__init__(driver)
     
