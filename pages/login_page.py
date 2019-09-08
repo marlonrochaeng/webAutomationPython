@@ -7,6 +7,7 @@ class LoginPage(BasePage):
     _login_field = "//input[@id='username']"
     _password_field = "//input[@id='password']"
     _login_button = "//i[contains(text(),'Login')]"
+    _logout_button = "//i[@class='icon-2x icon-signout']"
     _login_message = "//div[@id='flash']"
     _select_login = "//a[@href='/login']"
 
@@ -24,7 +25,7 @@ class LoginPage(BasePage):
             self.ClickOn("xpath", self._select_login)
         
     def IsLogged(self):
-        message = self.GetElement("xpath", self._login_message)
+        message = self.WaitElement(locatorType="xpath",locator=self._login_message,timeout=50)
         return "You logged into a secure area!" in message.text
     
     def goToPage(self, url):

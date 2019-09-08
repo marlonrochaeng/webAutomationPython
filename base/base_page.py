@@ -100,10 +100,10 @@ class BasePage():
         element = None
         try:
             byType = self.GetByType(locatorType)
-            self.log.info("Waiting for :: " + str(timeout) + " :: seconds for element to be clickable")
-            element = WebDriverWait(driver,timeout).until(EC.element_to_be_clickable((byType, locator)))
+            self.log.info("Waiting for :: " + str(timeout) + " :: seconds for element")
+            element = WebDriverWait(self.driver,timeout).until(EC.presence_of_element_located((byType, locator)))
         except:
-            self.log.info("Element not found...")
+            self.log.info("Element "+ locator +" not found...")
             print_stack()
         return element
 

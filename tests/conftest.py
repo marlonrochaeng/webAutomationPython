@@ -33,7 +33,7 @@ def BrowserSetUp(request, browser):
         print("Tests will be executed on Chrome")
         driver = webdriver.Chrome("C:\\Users\\malencar\\Downloads\\chromedriver_win32\\chromedriver.exe")
     driver.maximize_window()
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(20)
 
     if request.cls:
         request.cls.driver = driver

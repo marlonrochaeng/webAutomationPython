@@ -1,10 +1,12 @@
+import os
+import unittest
+
+import pytest
+from ddt import data, ddt, unpack
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+
 from pages.login_page import LoginPage
-import unittest
-import pytest
-import os
-from ddt import ddt, data, unpack
 from utilities.read_data import getCsvData
 
 
@@ -18,11 +20,9 @@ class LoginTest(unittest.TestCase):
         yield
         self.driver.quit()
 
-    @data(*getCsvData('C:\\Users\\malencar\\Documents\\MeusProjetos\\WebAutomation\\data\\invalid_login_test.csv'))
+    @data(*getCsvData('data\\login\\invalid_login_test.csv'))
     @unpack
-    def test_invalid_login(self, username, password):
-        url = "https://the-internet.herokuapp.com/"
-                
+    def test_invalid_login(self, url, username, password):
         self.loginPage.goToPage(url)
         self.loginPage.SelectFromLogin("loginForm")
         self.loginPage.Login(username, password)
