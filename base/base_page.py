@@ -133,7 +133,7 @@ class BasePage():
         if "FAIL" in self.resultList:
             self.log.error(testName + " ###TEST FAILED...")
             self.resultList.clear()
-            self.driver.quit()
+            #self.driver.quit()
             assert True == False
         else:
             self.log.info(testName + " ###TEST SUCCESSFUL...")

@@ -5,9 +5,11 @@ from timeit import default_timer as timer
 from datetime import timedelta
 from config.evidence_gen import EvidenceGenerator
 from werkzeug.security import safe_str_cmp
+import pytest_html
 
 SCREENSHOT = 'screenshots/'
 
+driver = None
 
 def pytest_sessionstart(session):
     session.results = dict()
@@ -25,6 +27,7 @@ def pytest_sessionfinish(session, exitstatus):
 
 @pytest.yield_fixture(scope='function')
 def BrowserSetUp(request, browser):
+    global driver
     print("Running browser setUp")
     if safe_str_cmp(browser,'firefox'):
         print("Tests will be executed on Firefox")
@@ -70,3 +73,20 @@ def GenerateEvidence(request,scope='session'):
         for e in evidencias:            
             doc.addEvidence(subdir,e,TEST_DIR+'/'+subdir+'/'+e)
     doc.createDocument(TEST_DIR+'/'+"doc.docx")
+
+from py.xml import html
+
+
+def pytest_runtest_makereport(__multicall__, item):
+    report = __multicall__.execute()
+    extra = getattr(report, 'extra', [])
+    if report.when == 'call':
+        url = driver.current_url
+        extra.append(pytest_html.extras.url(url))
+        screenshot = driver.get_screenshot_as_base64()
+        extra.append(pytest_html.extras.image(screenshot, 'Screenshot'))
+        html = driver.page_source.encode('utf-8')
+        extra.append(pytest_html.extras.text(html, 'HTML'))
+        #extra.append(pytest_html.extras.html(html.div('Additional HTML')))
+        report.extra = extra
+    return report
