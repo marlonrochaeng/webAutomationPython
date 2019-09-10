@@ -10,8 +10,8 @@ class EvidenceGenerator():
     def fillHeader(self, project, execTime, finalResult):
         self.document.add_heading('Evidence document', 0)
         records = (
-        (project, execTime, finalResult),
-    )   
+            (project, execTime, finalResult),
+        )   
         table = self.document.add_table(rows=1, cols=3)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells

@@ -6,6 +6,11 @@ from datetime import timedelta
 from config.evidence_gen import EvidenceGenerator
 from werkzeug.security import safe_str_cmp
 import pytest_html
+from py.xml import html
+import os
+import threading
+import time
+
 
 SCREENSHOT = 'screenshots/'
 
@@ -40,7 +45,6 @@ def BrowserSetUp(request, browser):
 
     if request.cls:
         request.cls.driver = driver
-    
     yield driver
 
 def pytest_addoption(parser):
@@ -66,6 +70,8 @@ def GenerateEvidence(request,scope='session'):
     doc = EvidenceGenerator("Test Automation Framework", 
                             str(round(pytest.time_end - pytest.time_start,2)) , result)
     TEST_DIR = SCREENSHOT+str(pytest.time_start)
+    if not os.path.exists(TEST_DIR): 
+        os.makedirs(TEST_DIR, exist_ok=True)
     dirs = os.listdir(TEST_DIR)  
     for subdir in dirs:
         evidencias = []
@@ -73,9 +79,6 @@ def GenerateEvidence(request,scope='session'):
         for e in evidencias:            
             doc.addEvidence(subdir,e,TEST_DIR+'/'+subdir+'/'+e)
     doc.createDocument(TEST_DIR+'/'+"doc.docx")
-
-from py.xml import html
-
 
 def pytest_runtest_makereport(__multicall__, item):
     report = __multicall__.execute()
@@ -87,6 +90,5 @@ def pytest_runtest_makereport(__multicall__, item):
         extra.append(pytest_html.extras.image(screenshot, 'Screenshot'))
         html = driver.page_source.encode('utf-8')
         extra.append(pytest_html.extras.text(html, 'HTML'))
-        #extra.append(pytest_html.extras.html(html.div('Additional HTML')))
         report.extra = extra
     return report

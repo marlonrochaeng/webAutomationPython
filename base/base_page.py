@@ -31,11 +31,10 @@ class BasePage():
             self.log.info("Locator type " + locatorType + "not correct/support...")
 
     def takeScreenshot(self, resultMessage):
-        folderName = str(pytest.time_start)+'/'+os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]+'/'
+        folderName = str(pytest.time_start)+'/'+os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0].split('___')[0]+'/'
         pytest.screenshotDirectory = os.path.join('screenshots/' ,folderName)
         fileName = resultMessage.replace(' ','_') + '_' + str(round(time.time() * 1000)) + '.png'
         finalFile = pytest.screenshotDirectory + fileName
-        
         try:
             if not os.path.exists(pytest.screenshotDirectory):
                 os.makedirs(pytest.screenshotDirectory)
@@ -86,7 +85,7 @@ class BasePage():
     def IsElementPresent(self, locatorType="xpath", locator=""):
         try:
             element = self.GetElement(locatorType, locator)
-            if element is not None:
+            if element:
                 self.log.info("Element found...")
                 return True
             else:
@@ -110,13 +109,10 @@ class BasePage():
     def setResult(self, result, resultMessage):
         self.takeScreenshot(resultMessage)
         try:
-            if result is not None:
-                if result:
-                    self.resultList.append("PASS")
-                    self.log.info("### VERIFICATION SUCCESSFULL:: "+ resultMessage)
-                else:
-                    self.resultList.append("FAIL")
-                    self.log.info("### VERIFICATION FAILED:: "+ resultMessage)
+            if result:
+                self.resultList.append("PASS")
+                self.log.info("### VERIFICATION SUCCESSFULL:: "+ resultMessage)
+
             else:
                 self.resultList.append("FAIL")
                 self.log.info("### VERIFICATION FAILED:: "+ resultMessage)  
@@ -129,11 +125,9 @@ class BasePage():
 
     def markFinal(self, testName, result, resultMessage):
         self.setResult(result, resultMessage)
-
         if "FAIL" in self.resultList:
             self.log.error(testName + " ###TEST FAILED...")
             self.resultList.clear()
-            #self.driver.quit()
             assert True == False
         else:
             self.log.info(testName + " ###TEST SUCCESSFUL...")
