@@ -1,0 +1,1 @@
+pytest -s -v --browser=chrome .\tests\login\valid_login_test.py

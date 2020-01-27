@@ -19,17 +19,6 @@ class BasePage():
         self.driver = driver
         self.resultList = []
 
-    def GetByType(self, locatorType):
-        locatorType = locatorType.lower()
-        if safe_str_cmp(locatorType, "id"):
-            return By.ID
-        if safe_str_cmp(locatorType, "name"):
-            return By.NAME
-        if safe_str_cmp(locatorType, "xpath"):
-            return By.XPATH
-        else:
-            self.log.info("Locator type " + locatorType + "not correct/support...")
-
     def takeScreenshot(self, resultMessage):
         folderName = str(pytest.time_start)+'/'+os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0].split('___')[0]+'/'
         pytest.screenshotDirectory = os.path.join('screenshots/' ,folderName)
@@ -44,47 +33,46 @@ class BasePage():
             self.log.error("### Exception Ocurred")
             print_stack()
 
-    def GetElement(self, locatorType="xpath", locator=""):
+    def GetElement(self, locator):
         element = None
         try:
-            byType = self.GetByType(locatorType)
-            element = self.driver.find_element(byType, locator)
+            element = self.driver.find_element(*locator)
             self.log.info("Element found...")
         except:
             self.log.info("Element not found...")
         return element
 
-    def ClickOn(self, locatorType="xpath", locator=""):
+    def ClickOn(self, locator):
         try:
-            element = self.GetElement(locatorType, locator)
+            element = self.GetElement(locator)
             element.click()
-            self.log.info("Clicked on : " + locator + " with locatorType: " + locatorType)
+            self.log.info("Clicked on : "+str(locator[1]))
         except:
-            self.log.info("Could not click on element: " + locator + " with locatorType: " + locatorType)
+            self.log.info("Could not click on element: "+str(locator[1]))
             print_stack()
     
-    def SendKeys(self, locatorType="xpath", locator="", text=""):
+    def SendKeys(self, locator, text=""):
         try:
-            element = self.GetElement(locatorType, locator)
+            element = self.GetElement(locator)
             element.send_keys(text)
-            self.log.info("Keys sended to: " + locator + " with locatorType: " + locatorType)
+            self.log.info("Keys sended to: " +str(locator[1]))
         except:
-            self.log.info("Could not send keys to element: " + locator + " with locatorType: " + locatorType)
+            self.log.info("Could not send keys to element: "+str(locator[1]))
             print_stack()
 
-    def SelectElementByText(self, locatorType="xpath", locator="", text=""):
+    def SelectElementByText(self, locator, text=""):
         try:
-            element = self.GetElement(locatorType, locator)
+            element = self.GetElement(locator)
             select = Select(element)
             select.select_by_visible_text(text)
-            self.log.info("Selected element from menu: " + locator + " with locatorType: " + locatorType)
+            self.log.info("Selected element from menu: "+str(locator[1]))
         except:
-            self.log.info("Could not select element: " + locator + " with locatorType: " + locatorType)
+            self.log.info("Could not select element: "+str(locator[1]))
             print_stack()
 
-    def IsElementPresent(self, locatorType="xpath", locator=""):
+    def IsElementPresent(self, locator):
         try:
-            element = self.GetElement(locatorType, locator)
+            element = self.GetElement(locator)
             if element:
                 self.log.info("Element found...")
                 return True
@@ -95,14 +83,13 @@ class BasePage():
             self.log.info("Element not found...")
             return False
 
-    def WaitElement(self, locatorType="xpath", locator="", timeout=20):
+    def WaitElement(self, locator, timeout=20):
         element = None
         try:
-            byType = self.GetByType(locatorType)
             self.log.info("Waiting for :: " + str(timeout) + " :: seconds for element")
-            element = WebDriverWait(self.driver,timeout).until(EC.presence_of_element_located((byType, locator)))
+            element = WebDriverWait(self.driver,timeout).until(EC.presence_of_element_located(locator))
         except:
-            self.log.info("Element "+ locator +" not found...")
+            self.log.info("Element not found: "+str(locator[1]))
             print_stack()
         return element
 
