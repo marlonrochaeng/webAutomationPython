@@ -32,6 +32,8 @@ class BasePage():
         except:
             self.log.error("### Exception Ocurred")
             print_stack()
+    def go_to(self, url):
+        self.driver.get(url)
 
     def GetElement(self, locator):
         element = None
@@ -92,6 +94,14 @@ class BasePage():
             self.log.info("Element not found: "+str(locator[1]))
             print_stack()
         return element
+
+    def get_element_size(self, locator):
+        el = self.GetElement(locator)
+        return el.size
+
+    def get_element_attribute(self, locator, attribute):
+        el = self.GetElement(locator)
+        return el.get_attribute(attribute)
 
     def setResult(self, result, resultMessage):
         self.takeScreenshot(resultMessage)
