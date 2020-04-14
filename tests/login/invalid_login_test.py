@@ -18,7 +18,7 @@ class LoginTest(unittest.TestCase):
         yield
         self.driver.quit()
 
-    @data(*getCsvData('data\\login\\invalid_login_test.csv'))
+    @data(*getCsvData('data/login/invalid_login_test.csv'))
     @unpack
     def test_invalid_login(self, url, username, password):
         self.loginPage.goToPage(url)

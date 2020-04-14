@@ -4,3 +4,4 @@ python-docx
 pytest-html
 ddt
 pytest
+requests
