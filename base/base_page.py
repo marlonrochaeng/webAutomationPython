@@ -46,6 +46,17 @@ class BasePage():
             raise
         return element
 
+    def GetElements(self, locator):
+        
+        elements = self.driver.find_elements(*locator)
+        if len(elements) > 0:
+            self.log.info("Element found...")
+            return True
+        else:
+            self.log.info("Element not found...")
+            return False
+            
+
     def ClickOn(self, locator):
         try:
             element = self.GetElement(locator)
@@ -53,8 +64,8 @@ class BasePage():
             self.log.info("Clicked on : "+str(locator[1]))
         except:
             self.log.info("Could not click on element: "+str(locator[1]))
-            raise
             print_stack()
+            raise
     
     def SendKeys(self, locator, text=""):
         try:
