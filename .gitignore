@@ -4,6 +4,7 @@
 __pycache__/
 screenshots/
 assets/
+webAut/
 
 # Don't track this files
 *.pyc

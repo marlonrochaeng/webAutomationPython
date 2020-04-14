@@ -34,12 +34,15 @@ def pytest_sessionfinish(session, exitstatus):
 def BrowserSetUp(request, browser):
     global driver
     print("Running browser setUp")
+
     if safe_str_cmp(browser,'firefox'):
         print("Tests will be executed on Firefox")
         driver = webdriver.Firefox()
     elif safe_str_cmp(browser,'chrome'):
         print("Tests will be executed on Chrome")
-        driver = webdriver.Chrome("config\\chromedriver.exe")
+        driver = webdriver.Chrome("config/chromedriver")
+    elif safe_str_cmp(browser,'safari'):
+        driver = webdriver.Safari()
     driver.maximize_window()
     driver.implicitly_wait(20)
 

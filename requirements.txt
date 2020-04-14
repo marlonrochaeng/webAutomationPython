@@ -1,0 +1,6 @@
+selenium
+werkzeug
+python-docx
+pytest-html
+ddt
+pytest
