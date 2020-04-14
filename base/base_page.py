@@ -32,6 +32,7 @@ class BasePage():
         except:
             self.log.error("### Exception Ocurred")
             print_stack()
+
     def go_to(self, url):
         self.driver.get(url)
 
@@ -42,6 +43,7 @@ class BasePage():
             self.log.info("Element found...")
         except:
             self.log.info("Element not found...")
+            raise
         return element
 
     def ClickOn(self, locator):
@@ -51,6 +53,7 @@ class BasePage():
             self.log.info("Clicked on : "+str(locator[1]))
         except:
             self.log.info("Could not click on element: "+str(locator[1]))
+            raise
             print_stack()
     
     def SendKeys(self, locator, text=""):
@@ -61,6 +64,7 @@ class BasePage():
         except:
             self.log.info("Could not send keys to element: "+str(locator[1]))
             print_stack()
+            raise
 
     def SelectElementByText(self, locator, text=""):
         try:
@@ -71,6 +75,7 @@ class BasePage():
         except:
             self.log.info("Could not select element: "+str(locator[1]))
             print_stack()
+            raise
 
     def IsElementPresent(self, locator):
         try:
