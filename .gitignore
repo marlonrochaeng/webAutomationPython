@@ -5,7 +5,9 @@ __pycache__/
 screenshots/
 assets/
 webAut/
+venv/
 
 # Don't track this files
 *.pyc
 *.pyo
+*.log
